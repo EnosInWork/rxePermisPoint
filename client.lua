@@ -214,7 +214,7 @@ Citizen.CreateThread(function()
  end
 end)
 
-RegisterCommand('permis', function()
+RegisterCommand(Config.cmdplayer, function()
     ESX.TriggerServerCallback('rPermisPoint:getLicenses', function(result)
         mylicenseClient = result
         mespoints()
