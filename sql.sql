@@ -1,0 +1,1 @@
+ALTER TABLE `user_licenses` ADD  `point` int(3) NOT NULL DEFAULT 12;
