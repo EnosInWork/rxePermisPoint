@@ -2,5 +2,5 @@
 
 [Clique ici pour rejoindre le Discord](https://discord.gg/yGFBCdv2Nm)
 
-[Vidéo présentation]()
+[Vidéo présentation](https://youtu.be/4bNFGzZuDaI)
  
