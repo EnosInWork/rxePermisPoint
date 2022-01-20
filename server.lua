@@ -3,16 +3,32 @@ local ESX
 TriggerEvent("esx:getSharedObject", function(lib) ESX = lib end)
 
 
+local function getPlayerNameWhereIdentifier(identifier)
+    MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
+        ['@identifier'] = identifier
+    }, function(result)
+        if result[1] then
+            fullName = result[1].firstname.." "..result[1].lastname
+        else
+            fullName = "Inconnu"
+        end
+    end)
+    return fullName
+end
+
+
 ESX.RegisterServerCallback('rPermisPoint:getAllLicenses', function(source, cb)
     local allLicenses = {}
     MySQL.Async.fetchAll('SELECT * FROM user_licenses', {}, function(result)
         for k,v in pairs(result) do
-                table.insert(allLicenses, {
-                    Name = ESX.GetPlayerFromIdentifier(v.owner).getName(),
-                    Type = v.type,
-                    Point = v.point,
-                    Owner = v.owner
-                })
+            local nameOwner = getPlayerNameWhereIdentifier(v.owner)
+            Wait(3)
+            table.insert(allLicenses, {
+                Name = nameOwner,
+                Type = v.type,
+                Point = v.point,
+                Owner = v.owner
+            })
         end
         cb(allLicenses)
     end)
@@ -28,7 +44,7 @@ ESX.RegisterServerCallback('rPermisPoint:getLicenses', function(source, cb)
     }, function(result)
         for k,v in pairs(result) do
                 table.insert(mylicense, {
-                    Name = ESX.GetPlayerFromIdentifier(v.owner).getName(),
+                    Name = xPlayer.getName(),
                     Type = v.type,
                     Point = v.point,
                     Owner = v.owner
