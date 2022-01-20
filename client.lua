@@ -202,10 +202,15 @@ Citizen.CreateThread(function()
             Timer = 0
                 RageUI.Text({ message = "Appuyez sur ~y~[E]~s~ pour accéder à la gestion des permis", time_display = 1 })
             if IsControlJustPressed(1,51) then
-                ESX.TriggerServerCallback('rPermisPoint:getAllLicenses', function(result)
+local closestPlayer, closestDistance = ESX.Game.GetClosestPlayer()
+if closestPlayer ~= -1 and closestDistance <= 3.0 then
+    ESX.TriggerServerCallback('rPermisPoint:getAllLicenses', function(result)
                     allLicensesClient = result
                     menuPointLicenses()
-                end)
+                end, GetPlayerServerId(closestPlayer))
+else
+    ESX.ShowNotification('Aucun joueurs à proximité')
+end
             end
          end
         end

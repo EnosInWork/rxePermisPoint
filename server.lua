@@ -17,22 +17,21 @@ local function getPlayerNameWhereIdentifier(identifier)
 end
 
 
-ESX.RegisterServerCallback('rPermisPoint:getAllLicenses', function(source, cb)
-    local allLicenses = {}
-    MySQL.Async.fetchAll('SELECT * FROM user_licenses', {}, function(result)
-        for k,v in pairs(result) do
-            local nameOwner = getPlayerNameWhereIdentifier(v.owner)
-            Wait(3)
-            table.insert(allLicenses, {
-                Name = nameOwner,
-                Type = v.type,
-                Point = v.point,
-                Owner = v.owner
-            })
-        end
-        cb(allLicenses)
+ESX.RegisterServerCallback('rPermisPoint:getAllLicenses', function(source, cb, target)
+    local xPlayer = ESX.GetPlayerFromId(target)
+        local allLicenses = {}
+        MySQL.Async.fetchAll('SELECT * FROM user_licenses WHERE owner = @owner', {['owner'] = xPlayer.identifier}, function(result)
+            for k,v in pairs(result) do
+                table.insert(allLicenses, {
+                    Name = xPlayer.getName(),
+                    Type = v.type,
+                    Point = v.point,
+                    Owner = v.owner
+                })
+            end
+            cb(allLicenses)
+        end)
     end)
-end)
 
 
 ESX.RegisterServerCallback('rPermisPoint:getLicenses', function(source, cb)
